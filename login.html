@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="" href="">
+    <title>Shop Smart</title>
+
+    <!-- Google Font CDN -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- AOS CDN -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="">
+
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar">
+
+
+            <!-- Nav Extras -->
+            <div class="nav-extras">
+                <!-- Cart and User Icons -->
+
+                <div class="nav-toggler">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+        <br>
+    </header>
+
+    <br><br><br><br><br><br><br><br><br>
+
+    <center>
+        <div id="" class="login-container">
+            <!-- Sign In Form -->
+            <form class="" id="">
+                <p class="form-title">Sign in Account</p>
+                <br>
+                <div class="input-container">
+                    <input type="email" id="email" placeholder="Enter email" required>
+                    <span></span>
+                </div>
+                <div class="input-container">
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="normal">
+                    Sign in
+                </button>
+                <p class="switch-form">Don't have an account? <a href="#" id="show-create-account">Create Account</a></p>
+            </form>
+
+            <!-- Create Account Form -->
+            <form class="form" id="create-account-form" style="display: none;">
+                <p class="form-title"> Create Account </p>
+                <br>
+                <div class="input-container">
+                    <input type="email" id="new-email" placeholder="Enter email" required>
+                    <span></span>
+                </div>
+                <div class="input-container">
+                    <input type="password" id="new-password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="submit">
+                    Create Account
+                </button>
+                <p class="switch-form"> Already have an account? <a href="#" id="show-sign-in">Sign In</a></p>
+            </form>
+        </div> 
+    </center>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const signInForm = document.getElementById('sign-in-form');
+        const createAccountForm = document.getElementById('create-account-form');
+        const showCreateAccountLink = document.getElementById('show-create-account');
+        const showSignInLink = document.getElementById('show-sign-in');
+
+        // Initialize the admin account in local storage if it doesn't exist
+        const adminAccount = { email: 'kitchenkings@gmail.com', password: '2123123' };
+        if (!localStorage.getItem('users')) {
+            localStorage.setItem('users', JSON.stringify([adminAccount]));
+        }
+
+        showCreateAccountLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            signInForm.style.display = 'none';
+            createAccountForm.style.display = 'block';
+        });
+
+        showSignInLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            createAccountForm.style.display = 'none';
+            signInForm.style.display = 'block';
+        });
+
+        signInForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(user => user.email === email && user.password === password);
+
+            if (user) {
+                localStorage.setItem('currentUser', email); 
+                if (email === 'kitchenkings@gmail.com') {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } else {
+                alert('Invalid login credentials. Please try again.');
+            }
+        });
+
+        createAccountForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newEmail = document.getElementById('new-email').value;
+            const newPassword = document.getElementById('new-password').value;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const existingUser = users.find(user => user.email === newEmail);
+
+            if (existingUser) {
+                alert('An account with this email already exists.');
+            } else {
+                users.push({ email: newEmail, password: newPassword });
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', newEmail); 
+                alert('Account created successfully!');
+                window.location.href = 'index.html';
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>
